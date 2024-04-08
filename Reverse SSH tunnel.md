@@ -4,12 +4,12 @@ In basis termen gaan we een connectie maken naar een beveiligd netwerk via een r
 
 In deze documentatie gaan we de volgende dingen behandelen
 
-+ Outbound ssh tunnel
-+ Reverse entry
-+ More port forwarding
-+ Listening interface
-+ Services
-+ SSH Flags
+1.  [[#Outbound SSH tunnel]]
+2. [[#Reverse Entry]]
+3. [[#More port forwarding]]
+4. [[#Listening interface]]
+5. [[#Services]]
+6. [[#SSH Flags]]
 
 # Outbound SSH tunnel
 
@@ -34,11 +34,11 @@ En dan hebben we natuurlijk op het einde de rest van de ssh syntax
 ```
 <naam>@<Server adress>
 ```
-die specificeerd als welke gebruiker we willen inloggen en op welk server adres. zorg ervoor dat dit overeenkomt met de user waar je de SSH key voor hebt gegenereerd.
+dit geeft aan als welke gebruiker we willen inloggen en op welk server adres. zorg ervoor dat dit overeenkomt met de user waar je de SSH key voor hebt gegenereerd.
 
 # Reverse Entry
 
-het volgende gedeelte speelt zich af in de proxy server.
+Het volgende gaan we op de proxyserver doen.
 
 Nu dat we een connectie hebben van de raspberry pi en de proxy server kunnen we ook via de proxy server naar de raspberry pi connecten.
 ```bash
@@ -71,7 +71,7 @@ Op deze manier hebben we onze services bereikbaar gemaakt vanuit de proxy server
 
 Nu moeten we eerst zelf verbinden met de proxy server, dit word een beetje vervelend als we services zoals node-red en postgresql willen gebruiken, deze kunnen niet altijd via een ssh tunnel worden verbonden. Dit komt doordat de -R flag standaard op localhost forward.
 
-als je zou kijken met een port commando:
+Als je zou kijken met een port commando:
 ```bash
 sudo netstat -tulpn | grep LISTEN
 ```
@@ -84,14 +84,14 @@ Om dit te kunnen maken moeten we de syntax van de outbound ssh code een klein be
 ```bash
 ssh -i <SSh key location> -R <Listen port>:localhost:5432 <naam>@<Server adress>
 ```
-we moeten een kleine aanpassing maken aan onze -R flag
+We moeten een kleine aanpassing maken aan onze -R flag
 
 ```bash
 -R <Interface>:<Listen port>:localhost:5432
 ```
-zoals je kunt zien hebben we een interface gespecificeerd, dit verteld uiteraard op welke interface we naar de port moeten luisteren, standaard was dit 127.0.0.1, dit is de localhost. Hier willen we 0.0.0.0 van maken.
+Zoals je kunt zien hebben we een interface gespecificeerd, dit verteld uiteraard op welke interface we naar de port moeten luisteren, standaard was dit 127.0.0.1, dit is de localhost. Hier willen we 0.0.0.0 van maken.
 
-hier is een voorbeeld
+Hier is een voorbeeld
 ```bash 
 -R 0.0.0.0:5432:localhost:5432 admin@<server adress>
 ```
@@ -101,7 +101,7 @@ Zou het niet mooi zijn als we het zo al hebben gefixt :). Dit is echter niet het
 ```bash
 sudo nano /etc/ssh/sshd_config
 ```
-gebruik dit commando om de sshd_config aan te passen. scroll vervolgens naar beneden totdat je de optie voor GatewayPorts ziet staan. deze is gecomment met een # en staat standaard op 'No'. Verander deze line naar "GatewatPorts yes".
+Gebruik dit commando om de sshd_config aan te passen. scroll vervolgens naar beneden totdat je de optie voor GatewayPorts ziet staan. deze is gecomment met een # en staat standaard op 'No'. Verander deze line naar "GatewayPorts yes".
 
 Save vervolgens de file door Ctrl + O in te toetsen en vervolgens enter om hem in dezelfde file te schrijven. Ctrl + X om uit nano te gaan.
 
@@ -112,14 +112,14 @@ Soms wil je dat een commando automatisch opstart als je de pi aansluit, of dat a
 
 Om een service te maken moet je eerst een file aanmaken met het .service file type:
 ``` bash
-sudo touch /etc/systemd/system/<ServiceNaam>.service
+sudo touch /etc/systemd/system/reverse-ssh.service
 ```
 Het is belangrijk dat het in de correcte folder staat en een .service file is. Anders kan systemctl hem niet vinden.
 
 
 Vervolgens kunnen we deze file aanpassen met Nano of een andere file editor:
 ``` bash
-sudo nano /etc/systemd/system/<ServiceNaam>.service
+sudo nano /etc/systemd/system/reverse-ssh.service
 ```
 
 Daarna kunnen we de service gaan aanmaken. Om meer te leren over services kun je deze informatie doornemen: [Systemctl](https://www.digitalocean.com/community/tutorials/how-to-use-systemctl-to-manage-systemd-services-and-units)

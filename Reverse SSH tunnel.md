@@ -4,7 +4,7 @@ In basis termen gaan we een connectie maken naar een beveiligd netwerk via een r
 
 In deze documentatie gaan we de volgende dingen behandelen
 
-1.  [[#Outbound SSH tunnel]]
+1. [[#Outbound SSH tunnel]]
 2. [[#Reverse Entry]]
 3. [[#More port forwarding]]
 4. [[#Listening interface]]

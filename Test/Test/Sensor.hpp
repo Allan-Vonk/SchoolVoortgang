@@ -5,5 +5,6 @@ enum SensorType {
 };
 
 class Sensor {
+protected:
 	float GetValue(SensorType);
 };
